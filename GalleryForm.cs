@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 
 namespace Gaze
 {
@@ -479,6 +480,36 @@ namespace Gaze
             }
             catch
             {
+            }
+        }
+
+        private void GalleryListView_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.C:
+                    if (e.Control)
+                    {
+                        if (GalleryListView.SelectedItems.Count > 0)
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            foreach (ListViewItem item in GalleryListView.SelectedItems)
+                            {
+                                sb.AppendLine(item.Text);
+                            }
+                            Clipboard.SetText(sb.ToString());
+                        }
+                    }
+                    break;
+                case Keys.V:
+                    if (e.Control)
+                    {
+                        if (Clipboard.ContainsImage())
+                        {
+                            m_windowManager.OpenImageWindow("CLIPBOARD");
+                        }
+                    }
+                    break;
             }
         }
 

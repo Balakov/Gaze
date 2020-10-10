@@ -83,6 +83,7 @@
             this.GalleryListView.TabIndex = 0;
             this.GalleryListView.UseCompatibleStateImageBehavior = false;
             this.GalleryListView.ItemActivate += new System.EventHandler(this.GalleryListView_ItemActivate);
+            this.GalleryListView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GalleryListView_KeyUp);
             // 
             // PathLinkLabel
             // 

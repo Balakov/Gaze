@@ -51,10 +51,17 @@ namespace Gaze
 
             string imageDirectory = Path.GetDirectoryName(imagePath);
 
-            var files = ScanImageFiles(imageDirectory);
-            int currentFileIndex = FindImageIndexInFiles(imagePath, files);
+            if (!string.IsNullOrEmpty(imageDirectory))
+            {
+                var files = ScanImageFiles(imageDirectory);
+                int currentFileIndex = FindImageIndexInFiles(imagePath, files);
 
-            SetImage(imageDirectory, imagePath, currentFileIndex, files.Count);
+                SetImage(imageDirectory, imagePath, currentFileIndex, files.Count);
+            }
+            else if(imagePath == "CLIPBOARD")
+            {
+                SetImage(imagePath, imagePath, 0, 0);
+            }
 
             this.Closing += new System.ComponentModel.CancelEventHandler(this.MyOnClosing);
         }
@@ -117,18 +124,26 @@ namespace Gaze
 
             if (imageFileName != null)
             {
-                try
+                if (imageFileName == "CLIPBOARD")
                 {
-                    var image = ImageLoader.Load(imageFileName);
-                    LoadUserRotationState(imageFileName, image);
-                    ImageBoxControl.Image = image;
+                    ImageBoxControl.Image = Clipboard.GetImage();
                     ImageBoxControl.Text = null;
                 }
-                catch (Exception e)
+                else
                 {
-                    ImageBoxControl.Image = null;
-                    ImageBoxControl.Text = e.Message;
-                    m_currentFileIndex = 0;
+                    try
+                    {
+                        var image = ImageLoader.Load(imageFileName);
+                        LoadUserRotationState(imageFileName, image);
+                        ImageBoxControl.Image = image;
+                        ImageBoxControl.Text = null;
+                    }
+                    catch (Exception e)
+                    {
+                        ImageBoxControl.Image = null;
+                        ImageBoxControl.Text = e.Message;
+                        m_currentFileIndex = 0;
+                    }
                 }
             }
             else
@@ -194,6 +209,17 @@ namespace Gaze
         private void galleryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_windowManager.OpenGalleryWindow(m_imageDirectory);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImageSaveFileDialog.Filter = "PNG Files (*.png)|*.png|All Files (*.*)|*.*";
+            var now = DateTime.Now;
+            ImageSaveFileDialog.FileName = $"Clipboard_{now.ToString("yyyy-MM-dd_HH-mm-ss")}.png";
+            if (ImageSaveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                ImageBoxControl.Image.Save(ImageSaveFileDialog.FileName);
+            }
         }
 
         private void ImageForm_KeyUp(object sender, KeyEventArgs e)
@@ -362,6 +388,6 @@ namespace Gaze
             }
 
         }
-    }
 
+    }
 }

@@ -35,7 +35,14 @@ namespace Gaze
 
                         using (var magickImage = new MagickImage(pngBytes, MagickFormat.Png))
                         {
-                            return magickImage.ToBitmap();
+                            if (width != 0 && height != 0)
+                            {
+                                return CreateThumbnail(magickImage, width, height);
+                            }
+                            else
+                            {
+                                return magickImage.ToBitmap();
+                            }
                         }
                     }
                 }
@@ -50,18 +57,7 @@ namespace Gaze
 
                     if (width != 0 && height != 0)
                     {
-                        magickImage.Thumbnail(width, height);
-                        var bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-                        using (var g = Graphics.FromImage(bmp))
-                        {
-                            using (var magicBitmap = magickImage.ToBitmap())
-                            {
-                                g.DrawImage(magicBitmap, (width - magickImage.Width) / 2, (height - magicBitmap.Height) / 2);
-                            }
-                        }
-
-                        return bmp;
+                        return CreateThumbnail(magickImage, width, height);
                     }
                     else
                     {
@@ -69,6 +65,22 @@ namespace Gaze
                     }
                 }
             }
+        }
+
+        private static Image CreateThumbnail(MagickImage magickImage, int width, int height)
+        {
+            magickImage.Thumbnail(width, height);
+            var bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            using (var g = Graphics.FromImage(bmp))
+            {
+                using (var magicBitmap = magickImage.ToBitmap())
+                {
+                    g.DrawImage(magicBitmap, (width - magickImage.Width) / 2, (height - magicBitmap.Height) / 2);
+                }
+            }
+
+            return bmp;
         }
     }
 }

@@ -33,10 +33,7 @@ namespace Gaze
                     {
                         if (m_folderThumbnail == null)
                         {
-                            using (var image = ImageLoader.Load(@".\\Icons\\Folder.png"))
-                            {
-                                m_folderThumbnail = CreateThumbnail(image, thumbnailWidth, thumbnailHeight);
-                            }
+                            m_folderThumbnail = Properties.Resources.Folder;
                         }
 
                         thumbnailProcessor.AddThumbnail(m_folderThumbnail, index, currentImageList);
@@ -45,14 +42,6 @@ namespace Gaze
                     {
                         var thumbnail = ImageLoader.Load(file, thumbnailWidth, thumbnailHeight);
                         thumbnailProcessor.AddThumbnail(thumbnail, index, currentImageList);
-                       
-                        /*
-                        using (var image = ImageLoader.Load(file))
-                        {
-                            var thumbnail = CreateThumbnail(image, thumbnailWidth, thumbnailHeight);
-                            thumbnailProcessor.AddThumbnail(thumbnail, index, currentImageList);
-                        }
-                        */
                     }
 
                     index++;
@@ -68,32 +57,5 @@ namespace Gaze
             m_abort = true;
         }
 
-        private Image CreateThumbnail(Image image, int desiredWidth, int desiredHeight)
-        {
-            var bmp = new Bitmap(desiredWidth, desiredHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            int width;
-            int height;
-
-            if (image.Width > image.Height)
-            {
-                float aspect = (float)image.Width / image.Height;
-                width = desiredWidth;
-                height = (int)(width / aspect);
-            }
-            else
-            {
-                float aspect = (float)image.Width / image.Height;
-                height = desiredHeight;
-                width = (int)(height * aspect);
-            }
-
-            using (var g = Graphics.FromImage(bmp))
-            {
-                g.DrawImage(image, (desiredWidth-width) / 2, (desiredHeight - height) / 2, width, height);
-            }
-
-            return bmp;
-        }
     }
 }

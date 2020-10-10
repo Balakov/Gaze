@@ -38,7 +38,10 @@
             this.ResetZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.galleryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ImageBoxControl = new Cyotek.Windows.Forms.ImageBox();
+            this.ImageSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.ViewOptionsContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,10 +54,12 @@
             this.toolStripMenuItem1,
             this.ResetZoomToolStripMenuItem,
             this.toolStripMenuItem3,
-            this.galleryToolStripMenuItem});
+            this.galleryToolStripMenuItem,
+            this.toolStripMenuItem4,
+            this.saveAsToolStripMenuItem});
             this.ViewOptionsContextMenuStrip.Name = "ViewOptionsContextMenuStrip";
             this.ViewOptionsContextMenuStrip.ShowCheckMargin = true;
-            this.ViewOptionsContextMenuStrip.Size = new System.Drawing.Size(147, 126);
+            this.ViewOptionsContextMenuStrip.Size = new System.Drawing.Size(147, 154);
             this.ViewOptionsContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.ViewOptionsContextMenuStrip_Opening);
             // 
             // ViewPixelsToolStripMenuItem
@@ -102,6 +107,18 @@
             this.galleryToolStripMenuItem.Text = "Gallery";
             this.galleryToolStripMenuItem.Click += new System.EventHandler(this.galleryToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(143, 6);
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveAsToolStripMenuItem.Text = "Save as...";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
             // ImageBoxControl
             // 
             this.ImageBoxControl.BackColor = System.Drawing.Color.DimGray;
@@ -143,5 +160,8 @@
         private System.Windows.Forms.ToolStripMenuItem ResetZoomToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem galleryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog ImageSaveFileDialog;
     }
 }
