@@ -84,6 +84,7 @@ namespace Gaze
         void MainForm_Load(object sender, EventArgs e)
         {
             this.Size = new Size(0, 0);
+            this.Opacity = 0;
         }
 
         private void CheckForClose()
