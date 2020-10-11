@@ -17,6 +17,7 @@ namespace Gaze
         private IconListManager m_iconListManager;
         private readonly TreeState m_treeState = new TreeState();
         private ThumbnailCreator m_thumbnailCreator;
+        private ThumbnailCache m_thumbnailCache;
         private IWindowManager m_windowManager;
 
         private readonly Config m_config;
@@ -37,12 +38,13 @@ namespace Gaze
             InitializeComponent();
         }
         
-        public GalleryForm(string path, Config config, string[] supportedExtensions, IWindowManager windowManager)
+        public GalleryForm(string path, Config config, string[] supportedExtensions, ThumbnailCache thumbnailCache, IWindowManager windowManager)
         {
             m_config = config;
             m_supportedExtensions = supportedExtensions;
             m_windowManager = windowManager;
             m_initialPath = path;
+            m_thumbnailCache = thumbnailCache;
 
             InitializeComponent();
         }
@@ -175,7 +177,8 @@ namespace Gaze
                             DirectoryInfo di = new DirectoryInfo(dir);
 
                             if (!di.Attributes.HasFlag(FileAttributes.Hidden) &&
-                                !di.Attributes.HasFlag(FileAttributes.System))
+                                !di.Attributes.HasFlag(FileAttributes.System) &&
+                                !Path.GetFileName(dir).StartsWith("."))
                             {
                                 string leafName = Path.GetFileName(dir);
 
@@ -241,6 +244,8 @@ namespace Gaze
         {
             BuildBreadcrumbs(directory);
 
+            PathTextBox.Text = directory;
+
             if (m_thumbnailCreator != null)
             {
                 m_thumbnailCreator.Abort();
@@ -256,11 +261,6 @@ namespace Gaze
 
             if (oldImageList != null)
             {
-                foreach (var image in oldImageList.Images)
-                {
-                    (image as Image).Dispose();
-                }
-
                 oldImageList.Dispose();
             }
 
@@ -277,7 +277,8 @@ namespace Gaze
                     DirectoryInfo di = new DirectoryInfo(dir);
 
                     if (!di.Attributes.HasFlag(FileAttributes.Hidden) &&
-                        !di.Attributes.HasFlag(FileAttributes.System))
+                        !di.Attributes.HasFlag(FileAttributes.System) &&
+                        !Path.GetFileName(dir).StartsWith("."))
                     {
                         files.Add(null);
 
@@ -309,7 +310,7 @@ namespace Gaze
                     }
                 }
 
-                m_thumbnailCreator = new ThumbnailCreator(files, this, c_thumbnailWidth, c_thumbnailHeight, imageList);
+                m_thumbnailCreator = new ThumbnailCreator(files, this, c_thumbnailWidth, c_thumbnailHeight, imageList, m_thumbnailCache);
             }
             catch (Exception)
             {
@@ -476,6 +477,8 @@ namespace Gaze
                         GalleryListView.LargeImageList.Images.Add(image);
                         GalleryListView.Items[index].ImageIndex = index;
                     }
+
+                    // Do not dispose the image as it's owned by the thumbnail cache
                 }
             }
             catch
@@ -510,7 +513,28 @@ namespace Gaze
                         }
                     }
                     break;
+                case Keys.F5:
+                    if (e.Shift)
+                    {
+                        m_thumbnailCache.ClearCache();
+                    }
+
+                    FillListView(PathTextBox.Text, syncDirectoryTreeView: false);
+                    break;
             }
+        }
+
+        private void PathTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
+            {
+                FillListView(PathTextBox.Text, syncDirectoryTreeView: true);
+            }
+        }
+
+        private void PathTextBox_Enter(object sender, EventArgs e)
+        {
+            PathTextBox.SelectAll();
         }
 
     }   // Class

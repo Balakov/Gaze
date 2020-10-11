@@ -20,6 +20,8 @@ namespace Gaze
         private readonly Config m_config = new Config();
         private Form m_openGalleryWindow = null;
         private List<Form> m_openImageWindows = new List<Form>();
+        private ThumbnailCache m_thumbnailCache = new ThumbnailCache();
+        private Timer m_startupTimer = new Timer();
 
         private readonly string[] m_supportedExtensions =
         {
@@ -52,7 +54,17 @@ namespace Gaze
             string configFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"YellowDroid\Gaze\settings.txt");
             m_config.Load(configFilename);
 
-            // If we have a commandline file then don't load the tree state
+            m_startupTimer.Interval = 250;
+            m_startupTimer.Tick += StartupimerTick;
+            m_startupTimer.Start();
+
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.MyOnClosing);
+        }
+
+        private void StartupimerTick(object sender, EventArgs e)
+        {
+            m_startupTimer.Stop();
+
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
@@ -62,8 +74,6 @@ namespace Gaze
             {
                 OpenGalleryWindow(null);
             }
-
-            this.Closing += new System.ComponentModel.CancelEventHandler(this.MyOnClosing);
         }
 
         private void MyOnClosing(object o, System.ComponentModel.CancelEventArgs e)
@@ -92,7 +102,7 @@ namespace Gaze
             }
             else
             {
-                var galleryForm = new GalleryForm(path, m_config, m_supportedExtensions, this);
+                var galleryForm = new GalleryForm(path, m_config, m_supportedExtensions, m_thumbnailCache, this);
                 m_openGalleryWindow = galleryForm;
                 galleryForm.Show();
             }
@@ -124,5 +134,18 @@ namespace Gaze
             m_openImageWindows.Remove(form);
             CheckForClose();
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // MainForm
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Name = "MainForm";
+            this.ResumeLayout(false);
+
+        }
+
     }
 }

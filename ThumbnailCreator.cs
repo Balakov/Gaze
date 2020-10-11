@@ -10,14 +10,13 @@ namespace Gaze
     {
         private Thread m_thread;
         private bool m_abort = false;
-        private Image m_folderThumbnail = null;
 
         public interface IAddThumbnail
         {
             void AddThumbnail(Image image, int index, ImageList currentImageList);
         }
 
-        public ThumbnailCreator(List<string> files, IAddThumbnail thumbnailProcessor, int thumbnailWidth, int thumbnailHeight, ImageList currentImageList)
+        public ThumbnailCreator(List<string> files, IAddThumbnail thumbnailProcessor, int thumbnailWidth, int thumbnailHeight, ImageList currentImageList, ThumbnailCache thumbnailCache)
         {
             m_thread = new Thread(() =>
             {
@@ -31,16 +30,12 @@ namespace Gaze
 
                     if (file == null)
                     {
-                        if (m_folderThumbnail == null)
-                        {
-                            m_folderThumbnail = Properties.Resources.Folder;
-                        }
-
-                        thumbnailProcessor.AddThumbnail(m_folderThumbnail, index, currentImageList);
+                        var thumbnail = ImageLoader.LoadFolderThumbnail(thumbnailWidth, thumbnailHeight, thumbnailCache);
+                        thumbnailProcessor.AddThumbnail(thumbnail, index, currentImageList);
                     }
                     else
                     {
-                        var thumbnail = ImageLoader.Load(file, thumbnailWidth, thumbnailHeight);
+                        var thumbnail = ImageLoader.Load(file, thumbnailWidth, thumbnailHeight, thumbnailCache);
                         thumbnailProcessor.AddThumbnail(thumbnail, index, currentImageList);
                     }
 

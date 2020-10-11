@@ -2,15 +2,22 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.Linq.Expressions;
-using System.Windows.Forms;
 
 namespace Gaze
 {
     static class ImageLoader
     {
-        public static Image Load(string path, int width=0, int height=0)
+        public static Image Load(string path, int width=0, int height=0, ThumbnailCache cache=null)
         {
+            if (width != 0 && height != 0 && cache != null)
+            {
+                Image cachedThumbnail = cache.Get(path);
+                if (cachedThumbnail != null)
+                {
+                    return cachedThumbnail;
+                }
+            }
+
             if (Path.GetExtension(path).ToLower() == ".afdesign")
             {
                 var bytes = File.ReadAllBytes(path);
@@ -37,11 +44,11 @@ namespace Gaze
                         {
                             if (width != 0 && height != 0)
                             {
-                                return CreateThumbnail(magickImage, width, height);
+                                return CacheAndReturnImage(cache, path, CreateThumbnail(magickImage, width, height));
                             }
                             else
                             {
-                                return magickImage.ToBitmap();
+                                return CacheAndReturnImage(cache, path, magickImage.ToBitmap());
                             }
                         }
                     }
@@ -51,20 +58,45 @@ namespace Gaze
             }
             else
             {
-                using (var magickImage = new MagickImage(path))
+                try
                 {
-                    magickImage.AutoOrient();
+                    using (var magickImage = new MagickImage(path))
+                    {
+                        magickImage.AutoOrient();
 
+                        if (width != 0 && height != 0)
+                        {
+                            return CacheAndReturnImage(cache, path, CreateThumbnail(magickImage, width, height));
+                        }
+                        else
+                        {
+                            return CacheAndReturnImage(cache, path, magickImage.ToBitmap());
+                        }
+                    }
+                }
+                catch
+                {
                     if (width != 0 && height != 0)
                     {
-                        return CreateThumbnail(magickImage, width, height);
+                        var badBitmap = new Bitmap(width, height);
+                        return CacheAndReturnImage(cache, path, badBitmap);
                     }
                     else
                     {
-                        return magickImage.ToBitmap();
+                        return CacheAndReturnImage(cache, path, new Bitmap(64,64));
                     }
                 }
             }
+        }
+
+        private static Image CacheAndReturnImage(ThumbnailCache cache, string path, Image image)
+        {
+            if (cache != null)
+            {
+                cache.Set(path, image);
+            }
+
+            return image;
         }
 
         private static Image CreateThumbnail(MagickImage magickImage, int width, int height)
@@ -78,6 +110,35 @@ namespace Gaze
                 {
                     g.DrawImage(magicBitmap, (width - magickImage.Width) / 2, (height - magicBitmap.Height) / 2);
                 }
+            }
+
+            return bmp;
+        }
+
+        public static Image LoadFolderThumbnail(int width, int height, ThumbnailCache cache)
+        {
+            if (cache != null)
+            {
+                Image cachedThumbnail = cache.Get("FOLDER");
+                if (cachedThumbnail != null)
+                {
+                    return cachedThumbnail;
+                }
+            }
+
+            var bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            Image img = Properties.Resources.Folder;
+            int size = Math.Min(width, height);
+
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.DrawImage(img, (width - size) / 2, (height - size) / 2, size, size);
+            }
+
+            if (cache != null)
+            {
+                cache.Set("FOLDER", bmp);
             }
 
             return bmp;

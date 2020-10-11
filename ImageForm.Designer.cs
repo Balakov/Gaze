@@ -42,6 +42,7 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ImageBoxControl = new Cyotek.Windows.Forms.ImageBox();
             this.ImageSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.fitToScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewOptionsContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,6 +53,7 @@
             this.ViewBilinearToolStripMenuItem,
             this.ViewBicubicToolStripMenuItem,
             this.toolStripMenuItem1,
+            this.fitToScreenToolStripMenuItem,
             this.ResetZoomToolStripMenuItem,
             this.toolStripMenuItem3,
             this.galleryToolStripMenuItem,
@@ -59,69 +61,70 @@
             this.saveAsToolStripMenuItem});
             this.ViewOptionsContextMenuStrip.Name = "ViewOptionsContextMenuStrip";
             this.ViewOptionsContextMenuStrip.ShowCheckMargin = true;
-            this.ViewOptionsContextMenuStrip.Size = new System.Drawing.Size(147, 154);
+            this.ViewOptionsContextMenuStrip.Size = new System.Drawing.Size(203, 198);
             this.ViewOptionsContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.ViewOptionsContextMenuStrip_Opening);
             // 
             // ViewPixelsToolStripMenuItem
             // 
             this.ViewPixelsToolStripMenuItem.Name = "ViewPixelsToolStripMenuItem";
-            this.ViewPixelsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.ViewPixelsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.ViewPixelsToolStripMenuItem.Text = "Pixels";
             this.ViewPixelsToolStripMenuItem.Click += new System.EventHandler(this.ViewPixelsToolStripMenuItem_Click);
             // 
             // ViewBilinearToolStripMenuItem
             // 
             this.ViewBilinearToolStripMenuItem.Name = "ViewBilinearToolStripMenuItem";
-            this.ViewBilinearToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.ViewBilinearToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.ViewBilinearToolStripMenuItem.Text = "Bilinear";
             this.ViewBilinearToolStripMenuItem.Click += new System.EventHandler(this.ViewBilinearToolStripMenuItem_Click);
             // 
             // ViewBicubicToolStripMenuItem
             // 
             this.ViewBicubicToolStripMenuItem.Name = "ViewBicubicToolStripMenuItem";
-            this.ViewBicubicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.ViewBicubicToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.ViewBicubicToolStripMenuItem.Text = "Bicubic";
             this.ViewBicubicToolStripMenuItem.Click += new System.EventHandler(this.ViewBicubicToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
             // 
             // ResetZoomToolStripMenuItem
             // 
             this.ResetZoomToolStripMenuItem.Name = "ResetZoomToolStripMenuItem";
-            this.ResetZoomToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.ResetZoomToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.ResetZoomToolStripMenuItem.Text = "Zoom 1:1";
             this.ResetZoomToolStripMenuItem.Click += new System.EventHandler(this.ResetZoomToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(143, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
             // 
             // galleryToolStripMenuItem
             // 
             this.galleryToolStripMenuItem.Name = "galleryToolStripMenuItem";
-            this.galleryToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.galleryToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.galleryToolStripMenuItem.Text = "Gallery";
             this.galleryToolStripMenuItem.Click += new System.EventHandler(this.galleryToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(143, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(199, 6);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.saveAsToolStripMenuItem.Text = "Save as...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // ImageBoxControl
             // 
             this.ImageBoxControl.BackColor = System.Drawing.Color.DimGray;
+            this.ImageBoxControl.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ImageBoxControl.ContextMenuStrip = this.ViewOptionsContextMenuStrip;
             this.ImageBoxControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ImageBoxControl.GridDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
@@ -130,6 +133,13 @@
             this.ImageBoxControl.Size = new System.Drawing.Size(1314, 940);
             this.ImageBoxControl.TabIndex = 0;
             this.ImageBoxControl.ZoomChanged += new System.EventHandler(this.ImageBoxControl_ZoomChanged);
+            // 
+            // fitToScreenToolStripMenuItem
+            // 
+            this.fitToScreenToolStripMenuItem.Name = "fitToScreenToolStripMenuItem";
+            this.fitToScreenToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.fitToScreenToolStripMenuItem.Text = "Fit to Screen";
+            this.fitToScreenToolStripMenuItem.Click += new System.EventHandler(this.fitToScreenToolStripMenuItem_Click);
             // 
             // ImageForm
             // 
@@ -163,5 +173,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog ImageSaveFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem fitToScreenToolStripMenuItem;
     }
 }

@@ -21,6 +21,8 @@ namespace Gaze
         private string m_imageFileName;
         private int m_currentFileIndex = 0;
         private int m_maxFileIndex = 0;
+        private bool m_isFullScreen = false;
+
         private Config m_config;
         private readonly string[] m_supportedExtensions;
         private IWindowManager m_windowManager;
@@ -211,6 +213,11 @@ namespace Gaze
             m_windowManager.OpenGalleryWindow(m_imageDirectory);
         }
 
+        private void fitToScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImageBoxControl.ZoomToFit();
+        }
+
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ImageSaveFileDialog.Filter = "PNG Files (*.png)|*.png|All Files (*.*)|*.*";
@@ -267,8 +274,18 @@ namespace Gaze
                 case Keys.G:
                     m_windowManager.OpenGalleryWindow(m_imageDirectory);
                     break;
+                case Keys.F11:
+                    FullScreen(!m_isFullScreen);
+                    break;
                 case Keys.Escape:
-                    Close();
+                    if (m_isFullScreen)
+                    {
+                        FullScreen(false);
+                    }
+                    else
+                    {
+                        Close();
+                    }
                     break;
             }
         }
@@ -386,7 +403,23 @@ namespace Gaze
 
                 ImageBoxControl.ZoomToFit();
             }
+        }
 
+        private void FullScreen(bool fullScreen)
+        {
+            if (fullScreen)
+            {
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Maximized;
+                ImageBoxControl.ZoomToFit();
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+            }
+
+            m_isFullScreen = fullScreen;
         }
 
     }
