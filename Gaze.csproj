@@ -145,6 +145,8 @@
   <ItemGroup>
     <Content Include="GazeAppIcon.ico" />
     <Content Include="Icons\Folder.png" />
+    <Content Include="Icons\GazeAppIcon.ico" />
+    <Content Include="Icons\GazeSmallIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Cyotek.Windows.Forms.ImageBox\Cyotek.Windows.Forms.ImageBox.csproj">
